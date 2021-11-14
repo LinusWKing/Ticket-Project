@@ -1,0 +1,3 @@
+C:/Users/Linus/Ticket System/build/_deps/googletest-subbuild/CMakeFiles/googletest-populate.dir
+C:/Users/Linus/Ticket System/build/_deps/googletest-subbuild/CMakeFiles/edit_cache.dir
+C:/Users/Linus/Ticket System/build/_deps/googletest-subbuild/CMakeFiles/rebuild_cache.dir

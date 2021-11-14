@@ -1,0 +1,5 @@
+if(EXISTS "C:/Users/Linus/Ticket System/build/proj_test[1]_tests.cmake")
+  include("C:/Users/Linus/Ticket System/build/proj_test[1]_tests.cmake")
+else()
+  add_test(proj_test_NOT_BUILT proj_test_NOT_BUILT)
+endif()

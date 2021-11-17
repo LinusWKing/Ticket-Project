@@ -5,9 +5,10 @@
 #include <time.h>
 #include <vector>
 
-static int ticketCount = 0, empCount = 0;
-int main();
+static int ticketCount = 0, empCount = 0; // Defined global variables
+int main();                               // Prototyping main()
 
+//Pause output
 void press_any_key()
 {
     int c;
@@ -23,6 +24,7 @@ void clear_input_buffer()
     std::cin.ignore(10000, '\n');
 }
 
+//Function to get cuurent time
 std::string current_time()
 {
     time_t rawtime;
@@ -35,6 +37,7 @@ std::string current_time()
     return now;
 }
 
+//Check that input is numeric
 bool check_chocie()
 {
     if (std::cin.fail())
@@ -57,6 +60,7 @@ public:
     std::string ticketID, description, staffID, itstaffID, status, dateRaised, dateClosed;
 
 public:
+    // Print created tickets
     void display_ticket()
     {
         std::cout << "\nTicket ID: " << ticketID << std::endl
@@ -67,6 +71,8 @@ public:
                   << "Date Raised: " << dateRaised << std::endl
                   << "Date Closed: " << dateClosed << std::endl;
     }
+
+    // Create a ticket
     void raise_ticket(std::string staff_id)
     {
 
@@ -78,6 +84,7 @@ public:
         dateRaised = current_time();
     }
 
+    // Address ticket and set staffID
     void address_ticket(std::string itstaff_id)
     {
         itstaffID = itstaff_id;
@@ -92,6 +99,7 @@ public:
 };
 Ticket ticket[20];
 
+// An abstract class with virtual methods
 class Employee
 {
 protected:
@@ -102,18 +110,16 @@ protected:
 public:
     static void landing_page(std::string id, int pos);
     static void login();
-    // virtual void view_ticket();
-    // virtual void view_faq();
+    virtual void view_ticket(std::string id) {}
+    //virtual void view_faq();
 };
 
+// Class inheriting from Employee
 class Staff : public Employee
 {
 
-private:
-    void raise_ticket();
-
 public:
-    void init_staff()
+    void init_staff() // Create dummy Staff
     {
         employee_id = "ST" + std::to_string(empCount + 1);
         password = "password";
@@ -123,12 +129,13 @@ public:
     {
     S_TICK:
         int found = 0, choice;
-        if (ticketCount == 0)
+        if (ticketCount == 0) // Check if any tickets exist in the system
         {
             std::cout << "\nNo ticket raised\n";
         }
         else
         {
+            // Check if current staff has any tickets and display them
             for (size_t i = 0; i < 20; i++)
             {
                 if (ticket[i].staffID.compare(id) == 0)
@@ -187,7 +194,7 @@ private:
     void update_faq();
 
 public:
-    void init_itstaff()
+    void init_itstaff() // Create Dummy IT Staff
     {
         employee_id = "IT" + std::to_string(empCount + 1);
         password = "admin";
@@ -207,6 +214,7 @@ public:
         {
             for (size_t i = 0; i < 20; i++)
             {
+                // Check if tickets exist and display them
                 if (!ticket[i].ticketID.empty())
                 {
                     ticket[i].display_ticket();
@@ -234,7 +242,7 @@ public:
 
                 for (size_t i = 0; i < 20; i++)
                 {
-                    if (ticket[i].ticketID.compare(ticketID) == 0)
+                    if (ticket[i].ticketID.compare(ticketID) == 0) // Checkif ticket ID is valid
                     {
                         ticket[i].address_ticket(id);
                         std::cout << "\nTicket addressed successfully\n";
@@ -258,10 +266,10 @@ public:
 
                 for (size_t i = 0; i < 20; i++)
                 {
-                    if (ticket[i].ticketID.compare(ticketID) == 0)
+                    if (ticket[i].ticketID.compare(ticketID) == 0) // Checkif ticket ID is valid
                     {
                         if (ticket[i].status.compare("Seen") == 0 &&
-                            ticket[i].itstaffID.compare(id) == 0)
+                            ticket[i].itstaffID.compare(id) == 0) // Check if staff attempting to close ticket is same as staff who raised it
                         {
                             ticket[i].close_ticket();
                             std::cout << "\nTicket closed successfully\n";
@@ -269,7 +277,7 @@ public:
                             clear_input_buffer();
                             goto I_TCKT;
                         }
-                        else if (ticket[i].status.compare("Seen") != 0)
+                        else if (ticket[i].status.compare("Seen") != 0) // Check that only 'Seen' status tickets can be closed
                         {
                             std::cout << "\nOpen tickets or already closed ticket cannot be closed.\n";
                             press_any_key();
@@ -331,7 +339,7 @@ void Employee ::landing_page(std::string id, int pos)
         switch (choice)
         {
         case 1:
-            if (id.substr(0, 2).compare("IT") == 0)
+            if (id.substr(0, 2).compare("IT") == 0) // Check if ID contains 'IT'
             {
                 itstaff[pos].view_ticket(id);
             }
@@ -343,7 +351,7 @@ void Employee ::landing_page(std::string id, int pos)
             break;
 
         case 2:
-            if (id.substr(0, 2).compare("IT") == 0)
+            if (id.substr(0, 2).compare("IT") == 0) // Check if ID contains 'IT'
             {
                 itstaff[pos].view_faq();
             }
@@ -392,6 +400,7 @@ void Employee ::login()
 
             for (size_t i = 0; i < 5; i++)
             {
+                // Check for corresponding ID and passwords. If found, login.
                 if (staff[i].employee_id == loginID && staff[i].password == password ||
                     itstaff[i].employee_id == loginID && itstaff[i].password == password)
                 {
@@ -404,6 +413,7 @@ void Employee ::login()
                 }
             }
 
+            // If no matching credentials
             if (!found)
             {
                 std::cout << "\nPlease enter valid username or password!!!!\n";
@@ -430,11 +440,13 @@ void Employee ::login()
 int main()
 {
 
+    //Initialise dummy employees
     for (size_t i = 0; i < 5; i++)
     {
         staff[i].init_staff();
         itstaff[i].init_itstaff();
         empCount++;
     }
+    // Call to login page
     Employee::login();
 }

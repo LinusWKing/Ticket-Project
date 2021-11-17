@@ -119,7 +119,7 @@ class Staff : public Employee
 {
 
 public:
-    void init_staff() // Create dummy Staff
+    void init_staff() // Create dummy Staff. With password=password and ID=ST{1...5}
     {
         employee_id = "ST" + std::to_string(empCount + 1);
         password = "password";
@@ -194,7 +194,7 @@ private:
     void update_faq();
 
 public:
-    void init_itstaff() // Create Dummy IT Staff
+    void init_itstaff() // Create Dummy IT Staff. With password=admin and ID=IT{1...5}
     {
         employee_id = "IT" + std::to_string(empCount + 1);
         password = "admin";

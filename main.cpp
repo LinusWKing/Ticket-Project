@@ -16,6 +16,7 @@
 static int ticketCount = 0, empCount = 0, faqCount = 0; // Defined global variables
 int main();                                             // Prototyping main function
 
+// Suppress terminal output
 void SetStdinEcho(bool enable = true)
 {
 #ifdef WIN32
@@ -688,6 +689,7 @@ int main()
         empCount++;
     }
 
+    //Add dummy entry
     faq[0].init_faq();
 
     // Call to login page

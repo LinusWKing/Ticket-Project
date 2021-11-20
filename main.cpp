@@ -277,12 +277,27 @@ public:
                 {
                     if (ticket[i].ticketID.compare(ticketID) == 0) // Checkif ticket ID is valid
                     {
-                        ticket[i].address_ticket(id);
-                        std::cout << "\nTicket addressed successfully\n";
-                        press_any_key();
-                        clear_input_buffer();
-                        found = true;
-                        goto I_TCKT;
+                        if (ticket[i].status == "Open") // Check ticket status. Only open tickets addressed
+                        {
+                            ticket[i].address_ticket(id);
+                            std::cout << "\nTicket addressed successfully\n";
+                            press_any_key();
+                            clear_input_buffer();
+                            found = true;
+                            goto I_TCKT;
+                        }
+                        else if (ticket[i].status == "Seen")
+                        {
+                            std::cout << "\nTicket already addressed\n";
+                            press_any_key();
+                            clear_input_buffer();
+                        }
+                        else
+                        {
+                            std::cout << "\nTicket already closed\n";
+                            press_any_key();
+                            clear_input_buffer();
+                        }
                     }
                 }
                 if (!found)

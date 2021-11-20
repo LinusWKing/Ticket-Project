@@ -13,6 +13,9 @@
 #include <time.h>
 #include <vector>
 
+static int ticketCount = 0, empCount = 0, faqCount = 0; // Defined global variables
+int main();                                             // Prototyping main function
+
 void SetStdinEcho(bool enable = true)
 {
 #ifdef WIN32
@@ -37,9 +40,6 @@ void SetStdinEcho(bool enable = true)
     (void)tcsetattr(STDIN_FILENO, TCSANOW, &tty);
 #endif
 }
-
-static int ticketCount = 0, empCount = 0; // Defined global variables
-int main();                               // Prototyping main()
 
 //Pause output
 void press_any_key()
@@ -132,6 +132,50 @@ public:
 };
 Ticket ticket[20];
 
+class FAQ
+{
+
+public:
+    std::string entryID, title, description;
+
+public:
+    // Print created entries
+    void display_entry()
+    {
+        std::cout << "\nEntry ID: " << entryID << std::endl
+                  << "Title: " << title << std::endl;
+    }
+
+    // View created entries
+    void read_entry()
+    {
+        std::cout << "\nEntry ID: " << entryID << std::endl
+                  << "Title: " << title << std::endl
+                  << "Description: " << description << std::endl;
+    }
+
+    // Create entry
+    void add_entry()
+    {
+
+        entryID = "FAQ" + std::to_string(faqCount + 1);
+        std::cout << "\nTitle:\n";
+        std::getline(std::cin >> std::ws, title);
+        std::cout << "\nDescription:\n";
+        std::getline(std::cin >> std::ws, description);
+        faqCount++;
+    }
+
+    void init_faq()
+    {
+        entryID = "FAQ1";
+        title = "Universal fix";
+        description = "Power it off and on again.";
+        faqCount++;
+    }
+};
+FAQ faq[20];
+
 // An abstract class with virtual methods
 class Employee
 {
@@ -144,7 +188,7 @@ public:
     static void landing_page(std::string id, int pos);
     static void login();
     virtual void view_ticket(std::string id) {}
-    //virtual void view_faq();
+    virtual void view_faq() {}
 };
 
 // Class inheriting from Employee
@@ -215,16 +259,79 @@ public:
 
         } while (true);
     }
-    void view_faq() {}
+    void view_faq()
+    {
+
+        int choice;
+        bool found = false;
+        std::string entryID;
+        if (faqCount == 0) // Check if any entries exist in the system
+        {
+            std::cout << "\nNo entries\n";
+        }
+        else
+        {
+            // Check if there are any entries and display them
+            for (size_t i = 0; i < 20; i++)
+            {
+                if (!faq[i].entryID.empty())
+                {
+                    faq[i].display_entry();
+                }
+            }
+        }
+
+        do
+        {
+
+            std::cout << "\n\nPlease select from following options: \n";
+            std::cout << "\n1. Read Entry \n0. Previous menu";
+            std::cout << "\n\nEnter the selected option: ";
+            std::cin >> choice;
+
+            if (!check_chocie())
+                continue;
+
+            switch (choice)
+            {
+            case 1:
+                std::cout << "\nEnter ticket ID: ";
+                std::cin >> entryID;
+
+                for (size_t i = 0; i < 20; i++)
+                {
+                    if (faq[i].entryID == entryID) // Checkif entry ID is valid
+                    {
+                        faq[i].read_entry();
+                        press_any_key();
+                        clear_input_buffer();
+                    }
+                }
+                if (!found)
+                {
+                    std::cout << "\nTicket not found. Try again\n";
+                }
+                continue;
+
+            case 0:
+                goto END;
+
+            default:
+                std::cout
+                    << "\nInvalid Choice. Try Again \n";
+                press_any_key();
+                continue;
+            }
+        END:
+            break;
+        } while (true);
+    }
 };
 
 Staff staff[5];
 
 class ITStaff : public Employee
 {
-
-private:
-    void update_faq();
 
 public:
     void init_itstaff() // Create Dummy IT Staff. With password=admin and ID=IT{1...5}
@@ -366,7 +473,77 @@ public:
             break;
         } while (true);
     }
-    void view_faq() {}
+    void view_faq()
+    {
+    V_FAQ:
+        int choice;
+        bool found;
+        std::string entryID;
+        if (faqCount == 0)
+        {
+            std::cout << "\nNo entry\n";
+        }
+        else
+        {
+            for (size_t i = 0; i < 20; i++)
+            {
+                // Check if entries exist and display them
+                if (!faq[i].entryID.empty())
+                {
+                    faq[i].display_entry();
+                }
+            }
+        }
+
+        do
+        {
+
+            std::cout << "\n\nPlease select from following options: \n";
+            std::cout << "\n1. View entry \n2. Add entry \n0. Previous menu";
+            std::cout << "\n\nEnter the selected option: ";
+            std::cin >> choice;
+
+            if (!check_chocie())
+                continue;
+
+            switch (choice)
+            {
+            case 1:
+                std::cout << "\nEnter entry ID: ";
+                std::cin >> entryID;
+
+                for (size_t i = 0; i < 20; i++)
+                {
+                    if (faq[i].entryID == entryID) // Checkif entry ID is valid
+                    {
+                        found = true;
+                        faq[i].read_entry();
+                        press_any_key();
+                        clear_input_buffer();
+                    }
+                }
+                if (!found)
+                {
+                    std::cout << "\nEntry not found. Try again\n";
+                }
+                continue;
+
+            case 2:
+                faq[faqCount].add_entry();
+                goto V_FAQ;
+            case 0:
+                goto END;
+
+            default:
+                std::cout
+                    << "\nInvalid Choice. Try Again \n";
+                press_any_key();
+                continue;
+            }
+        END:
+            break;
+        } while (true);
+    }
 };
 ITStaff itstaff[5];
 
@@ -510,6 +687,9 @@ int main()
         itstaff[i].init_itstaff();
         empCount++;
     }
+
+    faq[0].init_faq();
+
     // Call to login page
     Employee::login();
 }

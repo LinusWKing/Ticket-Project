@@ -412,8 +412,10 @@ void Employee ::login()
     int currentPosition, choice;
     std::string loginID, password;
     bool found;
+
     do
     {
+        int counter = 3;
         std::cout << "\nPlease select an option\n\n";
         std::cout << "1. Login \n0. Exit";
         std::cout << "\n\nEnter Selected Option: ";
@@ -448,10 +450,21 @@ void Employee ::login()
                 }
             }
 
+            if (counter == 0)
+            {
+                std::cout << "\nAttempts exhausted! Redirecting...";
+                press_any_key();
+                clear_input_buffer();
+                login();
+            }
+
             // If no matching credentials
             if (!found)
             {
                 std::cout << "\nPlease enter valid username or password!!!!\n";
+                std::cout << '\n'
+                          << counter << " Attempt(s) remaining";
+                counter--;
                 press_any_key();
                 clear_input_buffer();
                 goto LOGIN;

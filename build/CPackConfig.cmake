@@ -25,7 +25,7 @@ set(CPACK_DEFAULT_PACKAGE_DESCRIPTION_FILE "C:/Program Files/CMake/share/cmake-3
 set(CPACK_DEFAULT_PACKAGE_DESCRIPTION_SUMMARY "ticket_system built using CMake")
 set(CPACK_GENERATOR "NSIS")
 set(CPACK_INSTALL_CMAKE_PROJECTS "C:/Users/Linus/Ticket System/build;ticket_system;ALL;/")
-set(CPACK_INSTALL_PREFIX "C:/Program Files (x86)/TicketSystem")
+set(CPACK_INSTALL_PREFIX "C:/Program Files (x86)/ticket_system")
 set(CPACK_MODULE_PATH "")
 set(CPACK_NSIS_DISPLAY_NAME "ticket_system 1.1.1")
 set(CPACK_NSIS_INSTALLER_ICON_CODE "")

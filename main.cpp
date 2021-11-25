@@ -643,7 +643,7 @@ void Employee ::login()
                 }
             }
 
-            if (counter == 0)
+            if (counter == 0 && !found)
             {
                 std::cout << "\nAttempts exhausted! Redirecting...";
                 press_any_key();

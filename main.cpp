@@ -296,7 +296,8 @@ public:
             switch (choice)
             {
             case 1:
-                std::cout << "\nEnter ticket ID: ";
+                found = false;
+                std::cout << "\nEnter entry ID: ";
                 std::cin >> entryID;
 
                 for (size_t i = 0; i < 20; i++)
@@ -310,7 +311,7 @@ public:
                 }
                 if (!found)
                 {
-                    std::cout << "\nTicket not found. Try again\n";
+                    std::cout << "\nEntry not found. Try again\n";
                 }
                 continue;
 
@@ -377,7 +378,7 @@ public:
             switch (choice)
             {
             case 1:
-
+                found = false;
                 std::cout << "\nEnter ticket ID: ";
                 std::cin >> ticketID;
 
@@ -399,12 +400,14 @@ public:
                             std::cout << "\nTicket already addressed\n";
                             press_any_key();
                             clear_input_buffer();
+                            goto I_TCKT;
                         }
                         else
                         {
                             std::cout << "\nTicket already closed\n";
                             press_any_key();
                             clear_input_buffer();
+                            goto I_TCKT;
                         }
                     }
                 }
@@ -416,7 +419,7 @@ public:
                 continue;
 
             case 2:
-
+                found = false;
                 std::cout << "\nEnter ticket ID: ";
                 std::cin >> ticketID;
 
@@ -424,6 +427,7 @@ public:
                 {
                     if (ticket[i].ticketID.compare(ticketID) == 0) // Checkif ticket ID is valid
                     {
+                        found = true;
                         if (ticket[i].status.compare("Seen") == 0 &&
                             ticket[i].itstaffID.compare(id) == 0) // Check if staff attempting to close ticket is same as staff who raised it
                         {
@@ -438,6 +442,7 @@ public:
                             std::cout << "\nOpen tickets or already closed ticket cannot be closed.\n";
                             press_any_key();
                             clear_input_buffer();
+                            goto I_TCKT;
                         }
                         else
                         {
@@ -445,11 +450,8 @@ public:
                             std::cout << "\nCannot close other staff tickets\n";
                             press_any_key();
                             clear_input_buffer();
+                            goto I_TCKT;
                         }
-
-                        ticket[i].address_ticket(id);
-                        found = true;
-                        break;
                     }
                 }
                 if (!found)
@@ -510,6 +512,7 @@ public:
             switch (choice)
             {
             case 1:
+                found = false;
                 std::cout << "\nEnter entry ID: ";
                 std::cin >> entryID;
 
